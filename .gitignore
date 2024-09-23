@@ -1,0 +1,56 @@
+# Logs
+logs
+*.log
+
+# Diagnostic reports
+report.*.json
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory
+coverage
+*.lcov
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional stylelint cache
+.stylelintcache
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# dotenv environment variable files
+.env
+.env.local
+
+# Next.js build output
+.next
+
+# Serverless directories
+.serverless/
+
+# Docusaurus cache and generated files
+.docusaurus
+
+# VSCode settings
+.vscode/
+
+# Yarn v2
+.yarn/cache
+.yarn/unplugged
+.pnp.*

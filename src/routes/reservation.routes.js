@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const reservationController = require('../controllers/reservationController');
+const reservationController = require('../controllers/reservation.controller');
 
 // Route to create a new reservation
 router.post('/', reservationController.createReservation);

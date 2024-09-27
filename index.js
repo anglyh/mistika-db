@@ -3,15 +3,22 @@ const connectDB = require('./db');
 const app = express();
 require('dotenv').config();
 
+// Connect to database
 connectDB();
 
-// Middlewares
+// Middleware for parsing JSON
 app.use(express.json());
 
-// Rutas
-const authRoutes = require('./src/routes/auth');
+// Route imports
+const userRoutes = require('./src/routes/userRoute');
+const clientRoutes = require('./src/routes/clientRoute');
+const reservationRoutes = require('./src/routes/reservationRoute');
 
-app.use('/auth', authRoutes);
+// Routes
+app.use('/auth', userRoutes);
+app.use('/clients', clientRoutes);
+app.use('/reservations', reservationRoutes);
 
+// Server configuration
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Servidor corriendo en el puerto ${PORT}`));
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -13,11 +13,13 @@ app.use(express.json());
 const userRoutes = require('./src/routes/user.routes');
 const clientRoutes = require('./src/routes/client.routes');
 const reservationRoutes = require('./src/routes/reservation.routes');
+const eventRoutes = require('./src/routes/event.routes');
 
 // Routes
 app.use('/auth', userRoutes);
 app.use('/clients', clientRoutes);
 app.use('/reservations', reservationRoutes);
+app.use('/events', eventRoutes);
 
 // Server configuration
 const PORT = process.env.PORT || 5000;

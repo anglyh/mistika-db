@@ -1,18 +1,26 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const ClientSchema = new mongoose.Schema({
-    name: { type: String, required: true },
-    type: { type: String, required: true },
-    location: {
-      address: { type: String, required: true },
-      coordinates: {
-        lat: { type: Number, required: true },
-        lng: { type: Number, required: true },
-      },
+const clientSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  googlePlaceId: { type: String, required: true, unique: true },
+  location: {
+    address: { type: String },
+    coordinates: {
+      type: [Number], // Un array de dos números: [lng, lat]
+      required: true,
+      index: '2dsphere' // Índice geoespacial para consultas 2D
+    }
+  },
+  rating: { type: Number },
+  priceLevel: { type: Number },
+  photos: [
+    {
+      photoReference: { type: String },
+      width: { type: Number },
+      height: { type: Number },
     },
-    email: { type: String, required: true, unique: true },
-    phone: { type: String, required: true, unique: true },
-  }, { timestamps: true });
-  
-  module.exports = mongoose.model('Client', ClientSchema);
-  
+  ],
+  editorialSummary: { type: String }, // Añadido el campo editorialSummary
+});
+
+module.exports = mongoose.model("Client", clientSchema);

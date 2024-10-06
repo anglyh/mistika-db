@@ -14,12 +14,14 @@ const userRoutes = require('./src/routes/user.routes');
 const clientRoutes = require('./src/routes/client.routes');
 const reservationRoutes = require('./src/routes/reservation.routes');
 const eventRoutes = require('./src/routes/event.routes');
+const restaurantRoutes = require('./src/routes/restaurant.routes')
 
 // Routes
 app.use('/auth', userRoutes);
 app.use('/clients', clientRoutes);
 app.use('/reservations', reservationRoutes);
 app.use('/events', eventRoutes);
+app.use('/restaurants', restaurantRoutes);
 
 // Server configuration
 const PORT = process.env.PORT || 5000;

@@ -67,3 +67,17 @@ exports.login = async (req, res) => {
     res.status(500).send({ message: error.message });
   }
 };
+
+exports.verifyToken = async (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1]; // Obtener el token del header Authorization
+  //console.log(req.headers.authorization );
+  if (!token) return res.status(400).json({ message: "Token no proporcionado" });
+
+  try {
+      // Verifica si el token es válido y no ha expirado
+      jwt.verify(token, process.env.JWT_SECRET);
+      res.json({ message: "Token válido" });
+  } catch (error) {
+      res.status(401).json({ message: "Token inválido o expirado" });
+  }
+}

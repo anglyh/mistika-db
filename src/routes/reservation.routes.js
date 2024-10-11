@@ -11,6 +11,8 @@ router.get('/', reservationController.getAllReservations);
 // Route to retrieve a single reservation by ID
 router.get('/:id', reservationController.getReservationById);
 
+router.get('/getByUserId/:userId', reservationController.getReservationByUserId);
+
 // Route to update a reservation
 router.put('/:id', reservationController.updateReservation);
 

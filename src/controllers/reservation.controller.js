@@ -32,6 +32,17 @@ exports.getReservationById = async (req, res) => {
   }
 };
 
+// Get all reservations by user ID
+exports.getReservationByUserId = async (req, res) => {
+  try {
+    const reservations = await Reservation.find({ userId: req.params.userId });
+    if (!reservations) return res.status(404).json({ message: 'Reservations not found' });
+    res.status(200).json(reservations);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 // Update a reservation
 exports.updateReservation = async (req, res) => {
   try {

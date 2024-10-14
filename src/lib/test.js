@@ -1,7 +1,7 @@
 require('dotenv').config();
 const { Client } = require('@googlemaps/google-maps-services-js');
-const ClientModel = require('../models/client.model'); // Importa tu modelo
-const connectDB = require('../../db'); // Importa tu función de conexión a la base de datos
+const { Client: ClientModel, Restaurant, Hotel } = require('../models/client.model'); // Importación actualizada
+const connectDB = require('../../db');
 
 // Conexión a la base de datos
 connectDB();
@@ -23,7 +23,7 @@ async function findPlaceAndSave(query) {
                 fields: ['place_id'],
                 key: apiKey
             },
-            timeout: 1000, // tiempo máximo en milisegundos
+            timeout: 1000,
         });
 
         console.log('Respuesta completa de Google Places (place_id):', findPlaceResponse.data);
@@ -63,23 +63,47 @@ async function findPlaceAndSave(query) {
         // Si se obtienen detalles del lugar
         const result = placeDetailsResponse.data.result;
 
-        // Guarda el lugar en la base de datos
-        const newClient = new ClientModel({
+        // Determinar el tipo de cliente basado en la información obtenida
+        let clientType = 'Other'; // Tipo por defecto
+        if (result.types) {
+            if (result.types.includes('restaurant')) {
+                clientType = 'Restaurant';
+            } else if (result.types.includes('lodging')) {
+                clientType = 'Hotel';
+            }
+        }
+
+        // Crear el objeto base del cliente
+        const clientData = {
             name: result.name,
             googlePlaceId: result.place_id,
             location: {
                 address: result.formatted_address,
-                coordinates: [result.geometry.location.lng, result.geometry.location.lat] // Formato correcto: [lng, lat]
+                coordinates: [result.geometry.location.lng, result.geometry.location.lat]
             },
             rating: result.rating,
-            priceLevel: result.price_level || null, // Si hay información sobre el nivel de precio
+            priceLevel: result.price_level || null,
             photos: result.photos ? result.photos.slice(0, 3).map(photo => ({
                 photoReference: photo.photo_reference,
                 width: photo.width,
-                height: photo.height
+                height: photo.height,
             })) : [],
-            editorialSummary: result.editorial_summary?.overview || 'No disponible' // Verifica si existe el campo editorial_summary
-        });
+            editorialSummary: result.editorial_summary?.overview || 'No disponible',
+            clientType: clientType // Asignar el tipo de cliente
+        };
+
+        // Crear la instancia del modelo apropiado
+        let newClient;
+        switch (clientType) {
+            case 'Restaurant':
+                newClient = new Restaurant(clientData);
+                break;
+            case 'Hotel':
+                newClient = new Hotel(clientData);
+                break;
+            default:
+                newClient = new ClientModel(clientData);
+        }
 
         await newClient.save();
         console.log('Lugar guardado en la base de datos:', newClient);
@@ -88,4 +112,6 @@ async function findPlaceAndSave(query) {
     }
 }
 
-module.exports = findPlaceAndSave;
+
+// module.exports = findPlaceAndSave;
+findPlaceAndSave('Starbucks, Mexico City');

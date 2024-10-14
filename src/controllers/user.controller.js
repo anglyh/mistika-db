@@ -60,7 +60,7 @@ exports.login = async (req, res) => {
     // Crear el token y enviarlo en la respuesta
     const payload = { userId: user.id, name: user.name, email: user.email };
     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
-
+    console.log(req.headers);
     res.status(200).json({ message: 'Usuario logeado', token });
   } catch (error) {
     console.error(error); // Añadir logging para depuración

@@ -1,11 +1,14 @@
 const mongoose = require("mongoose");
 
-// Esquema base para todos los clientes
 const clientSchema = new mongoose.Schema({
+  username: { type: String, required: true },
+  password: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
   name: { type: String, required: true },
+  clientType: { type: String, required: true, enum: ['Restaurante', 'Hotel', 'Otro'] },
   googlePlaceId: { type: String, required: true, unique: true },
   location: {
-    address: { type: String },
+    address: { type: String, required: true },
     coordinates: {
       type: [Number],
       required: true,
@@ -13,14 +16,13 @@ const clientSchema = new mongoose.Schema({
     }
   },
   rating: { type: Number },
-  priceLevel: { type: Number },
   photos: [{
     photoReference: { type: String },
     width: { type: Number },
     height: { type: Number },
   }],
   editorialSummary: { type: String },
-  clientType: { type: String, required: true, enum: ['Restaurant', 'Hotel', 'Other'] }
+  reservations: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Reservation' }]
 }, { discriminatorKey: 'clientType' });
 
 // Modelo base de Cliente
@@ -41,7 +43,7 @@ const hotelSchema = new mongoose.Schema({
 });
 
 // Creamos los modelos específicos usando discriminadores
-const Restaurant = Client.discriminator('Restaurant', restaurantSchema);
+const Restaurant = Client.discriminator('Restaurante', restaurantSchema);
 const Hotel = Client.discriminator('Hotel', hotelSchema);
 
 module.exports = {

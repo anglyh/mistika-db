@@ -3,7 +3,9 @@ const router = express.Router();
 const clientController = require('../controllers/client.controller');
 
 // Route to create a new client
-router.post('/', clientController.createClient);
+router.post('/register', clientController.registerClient);
+
+router.post('/login', clientController.loginClient);
 
 // Route to retrieve all clients
 router.get('/', clientController.getAllClients);

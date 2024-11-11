@@ -25,24 +25,20 @@ const clientSchema = new mongoose.Schema({
   reservations: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Reservation' }]
 }, { discriminatorKey: 'clientType' });
 
-// Modelo base de Cliente
 const Client = mongoose.model('Client', clientSchema);
 
-// Esquema específico para Restaurantes
 const restaurantSchema = new mongoose.Schema({
   cuisine: [{ type: String }],
   menuUrl: { type: String },
   reservationRequired: { type: Boolean },
 });
 
-// Esquema específico para Hoteles
 const hotelSchema = new mongoose.Schema({
   starRating: { type: Number },
   amenities: [{ type: String }],
   roomTypes: [{ type: String }],
 });
 
-// Creamos los modelos específicos usando discriminadores
 const Restaurant = Client.discriminator('Restaurante', restaurantSchema);
 const Hotel = Client.discriminator('Hotel', hotelSchema);
 

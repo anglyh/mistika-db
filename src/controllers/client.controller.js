@@ -5,9 +5,7 @@ const bcrypt = require('bcrypt');
 
 exports.registerClient = async (req, res) => {
   const { username, email, password, clientType, place } = req.body;
-
   const { name, address, location, rating, photos, types, place_id } = place;
-
   try {
     if (!username || !email || !password || !clientType || !place) {
       return res.status(400).json({ message: 'Todos los campos obligatorios deben ser proporcionados' });
@@ -23,13 +21,12 @@ exports.registerClient = async (req, res) => {
       return res.status(409).json({ message: 'El correo electrónico ya está registrado' });
     }
 
-    // Encriptar la contraseña
-    const saltRounds = 10; // Puedes ajustar el número de rondas de sal si lo deseas
+    const saltRounds = 10; 
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     const clientData = {
       username,
-      password: hashedPassword, // Guarda la contraseña encriptada
+      password: hashedPassword,
       email,
       name,
       clientType,
@@ -54,7 +51,6 @@ exports.registerClient = async (req, res) => {
       default:
         newClient = new Client(clientData);
     }
-
     await newClient.save();
 
     const payload = { clientId: newClient._id, name: newClient.name, email: newClient.email, clientType };
@@ -71,19 +67,12 @@ exports.loginClient = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    if (!email || !password) {
-      return res.status(400).json({ message: 'El correo electrónico y la contraseña son obligatorios' });
-    }
+    if (!email || !password) return res.status(400).json({ message: 'El correo electrónico y la contraseña son obligatorios' });
 
     const client = await Client.findOne({ email });
-    if (!client) {
-      return res.status(400).json({ message: 'Cliente no registrado' });
-    }
-
+    if (!client) return res.status(400).json({ message: 'Cliente no registrado' });
     const isMatch = await bcrypt.compare(password, client.password);
-    if (!isMatch) {
-      return res.status(400).json({ message: 'Contraseña incorrecta' });
-    }
+    if (!isMatch) return res.status(400).json({ message: 'Contraseña incorrecta' });
 
     const payload = { clientId: client._id, name: client.name, email: client.email, clientType: client.clientType };
     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });

@@ -12,4 +12,4 @@ const ReservationSchema = new mongoose.Schema({
     }
   }, { timestamps: true });
   
-  module.exports = mongoose.model('Reservation', ReservationSchema);
+module.exports = mongoose.model('Reservation', ReservationSchema);

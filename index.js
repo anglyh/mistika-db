@@ -10,6 +10,11 @@ connectDB();
 
 app.use(express.json());
 
+app.get('/', (req, res) => {
+  res.status(200).send('Backend is healthy!');
+});
+
+
 const userRoutes = require('./src/routes/user.routes');
 const clientRoutes = require('./src/routes/client.routes');
 const reservationRoutes = require('./src/routes/reservation.routes');
